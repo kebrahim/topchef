@@ -1,0 +1,47 @@
+@CHARSET "UTF-8";
+
+@import url("layout.css");
+
+/* Base */
+body {margin:0; font: 13px arial,helvetica,clean,sans-serif;}
+.bodyleft {text-align:left; padding-left:10;}
+.bodycenter {text-align:center;}
+table {font-size:14;}
+table.left {text-align:center;}
+table.center {margin-left:auto; margin-right:auto; text-align:center;}
+.vert_td_top {vertical-align:top;}
+.smallfonttable {font-size:11;}
+h1 {margin:0.67em 0 0.67em;}
+h2 {margin:0.83em 0 0.83em;}
+h3 {margin:1em 0 1em;}
+h4 {margin:1.33em 0 1.33em;}
+label {font-weight:bold;}
+fieldset {width: 153px; text-align:left;}
+
+/* Messages */
+.error_msg, .error_msg_pad, .error_msg_pad_bottom {color:red; font-weight:bold;}
+.error_msg_pad {padding-top:20;}
+.error_msg_pad_bottom {padding-bottom:20;}
+.alert_msg, .alert_msg_pad, .alert_msg_pad_top {color:green; font-weight:bold;}
+.alert_msg_pad_top {padding-top:20;}
+.alert_msg_pad {padding-bottom:20;}
+
+/* Login page */
+#logininfo {margin-left:6;}
+#logininfo fieldset {margin:20 auto 0 auto;}
+#signinbutton {text-align:center;}
+
+/* Rank page */
+.placeholder_row {background-color:#E3F2F9;}
+.finished_ranking {background-color:#BCECBE;}
+
+/* Draft/Auction page */
+.selected_team_row {background-color:#E3F2F9;}
+
+/* Placeholder page */
+.placeholder {background-color:#BCECBE;}
+.placeholder_missing {background-color:#F09E9E;}
+
+/* Manage ranks page */
+.row_indb {background-color:#BCECBE;}
+.row_missing {background-color:#F09E9E;}
