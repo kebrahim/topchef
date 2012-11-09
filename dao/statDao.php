@@ -1,12 +1,13 @@
 <?php
 
 require_once 'commonDao.php';
+CommonDao::requireFileIn('/../entity/', 'chefStat.php');
 CommonDao::requireFileIn('/../entity/', 'stat.php');
 CommonDao::requireFileIn('/../entity/', 'statLine.php');
 
 class StatDao {
 
-  public function getMaxWeek() {
+  public static function getMaxWeek() {
     CommonDao::connectToDb();
     $query = "select max(week) from chef_stat";
     $res = mysql_query($query);
@@ -96,6 +97,40 @@ class StatDao {
       $statsDb[] = StatDao::populateStat($statDb);
     }
     return $statsDb;
+  }
+
+  /**
+   * Deletes all of the chefstats for the specified week.
+   */
+  public static function deleteForWeek($week) {
+    CommonDao::connectToDb();
+    $query = "delete from chef_stat where week = $week";
+    mysql_query($query);
+  }
+
+  /**
+   * Creates the specified chefstat in the 'chef_stat' table.
+   */
+  public static function createChefStat($chefStat) {
+    CommonDao::connectToDb();
+    $query = "insert into chef_stat(chef_id, stat_id, week) values (" .
+              $chefStat->getChefId() . ", " .
+              $chefStat->getStatId() . ", " .
+              $chefStat->getWeek() . ")";
+    $result = mysql_query($query);
+    if (!$result) {
+      echo "Error inserting chef Stat into DB. Try again.";
+      return null;
+    }
+
+    $idQuery = "select chef_stat_id from chef_stat
+                where chef_id = " . $chefStat->getChefId() .
+              " and stat_id = " . $chefStat->getStatId() .
+              " and week = " . $chefStat->getWeek();
+    $result = mysql_query($idQuery) or die('Invalid query: ' . mysql_error());
+    $row = mysql_fetch_assoc($result);
+    $chefStat->setId($row["chef_stat_id"]);
+    return $chefStat;
   }
 }
 ?>

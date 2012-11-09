@@ -66,5 +66,14 @@ class StatLine {
     }
     return false;
   }
+
+  public function hasStat($stat) {
+    foreach ($this->stats as $myStat) {
+      if ($myStat->getAbbreviation() == $stat->getAbbreviation()) {
+        return true;
+      }
+    }
+    return false;
+  }
 }
 ?>

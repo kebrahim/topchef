@@ -4,10 +4,11 @@ require_once "sessions.php";
 class NavigationUtil {
   const SCOREBOARD_BUTTON = 1;
   const MY_TEAM_BUTTON = 2;
-  const DRAFT_BUTTON = 3;
-  const ADMIN_BUTTON = 4;
-  const MANAGE_RESULTS_BUTTON = 5;
-  const MANAGE_TEAM_BUTTON = 6;
+  const WEEKLY_PICKS_BUTTON = 3;
+  const DRAFT_BUTTON = 4;
+  const ADMIN_BUTTON = 5;
+  const MANAGE_SCORES_BUTTON = 6;
+  const MANAGE_TEAM_BUTTON = 7;
 
   public static function printHeader($showNavigationLinks, $isTopLevel, $selectedButton) {
     NavigationUtil::displayHeader($showNavigationLinks, $isTopLevel, $selectedButton, 'wrapper');
@@ -95,14 +96,14 @@ class NavigationUtil {
   	echo "<li class='dropdown'>";
   	$adminSelected = ($selectedButton >= self::ADMIN_BUTTON);
   	NavigationUtil::printLink(
-  			"admin/manageResults.php", "Admin", $isTopLevel, $adminSelected);
+  			"admin/manageScores.php", "Admin", $isTopLevel, $adminSelected);
 
   	// sub-menu includes all admin options
   	echo "<ul class='dropdown'>";
 
     // Manage results
-  	NavigationUtil::printListItem("admin/manageResults.php", "Manage Results", $isTopLevel,
-  	    $selectedButton, self::MANAGE_RESULTS_BUTTON);
+  	NavigationUtil::printListItem("admin/manageScores.php", "Manage Scores", $isTopLevel,
+  	    $selectedButton, self::MANAGE_SCORES_BUTTON);
 
   	// Manage Team
   	NavigationUtil::printListItem("admin/manageTeam.php", "Manage Team", $isTopLevel,
