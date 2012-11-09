@@ -65,7 +65,7 @@ class Chef {
   }
 
   public function getBodyImg($width, $height) {
-    return "<img src='" . $this->getHeadshotUrl() . "' width=$width height=$height />";
+    return "<img src='" . $this->getBodyUrl() . "' width=$width height=$height />";
   }
 
   public function getFantasyTeam() {

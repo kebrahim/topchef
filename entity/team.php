@@ -69,7 +69,7 @@ class Team {
       return;
     }
 
-    echo "<h4>Chefs</h4>";
+    echo "<h2>Chefs</h2>";
     echo "<table class='left' border><tr>";
     echo "<th></th><th>Name</th><th>Draft Rd</th><th>Fantasy Points</th></tr>";
     // TODO add round drafted in

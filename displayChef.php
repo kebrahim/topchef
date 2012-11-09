@@ -30,13 +30,19 @@
   }
 
   // Display chef attributes.
-  echo "<div class='bodyleft'>";
+  echo "<div class='bodycenter'>";
   echo "<h1>" . $chef->getFullName() . "</h1>";
+  
+  // if admin user, show edit link
+  if (SessionUtil::isLoggedInAdmin()) {
+  	echo "<a href='admin/manageChef.php?chef_id=" . $chef->getId() .
+  	"'>Manage chef</a><br>";
+  }
+  
+  echo "<div id='column_container'>";
 
-  // Headshot
-  echo $chef->getHeadshotImg(170, 113);
-
-  echo "<br/><br/><table>";
+  echo "<div id='left_col'><div id='left_col_inner'>";
+  echo "<table class='center'>";
 
   // Fantasy team
   echo "<tr><td><strong>Fantasy Team:</strong></td><td>";
@@ -52,13 +58,14 @@
 
   echo "</table><br/>";
 
-  // if admin user, show edit link
-  if (SessionUtil::isLoggedInAdmin()) {
-    echo "<a href='admin/manageChef.php?chef_id=" . $chef->getId() .
-        "'>Manage chef</a><br>";
-  }
-
   // TODO show chef's scoring stats
+  echo "</div></div>";
+  
+  echo "<div id='right_col'><div id='right_col_inner'>";
+  // Headshot
+  echo $chef->getBodyImg(400, 600);
+  echo "</div></div></div>";
+  
   echo "</div>";
 
   // Display footer
