@@ -46,7 +46,7 @@ class Chef {
   }
 
   public function getNameLink($isTopLevel) {
-  	return "<a href='" . ($isTopLevel ? "" : "../") . "displayChef.php?chef_id=" .
+  	return "<a href='" . ($isTopLevel ? "" : "../") . "chefPage.php?chef_id=" .
     	$this->getId() . "'>" . $this->getFullName() . "</a>";
   }
 

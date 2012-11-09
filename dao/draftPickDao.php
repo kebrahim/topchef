@@ -16,7 +16,7 @@ class DraftPickDao {
               from draft_pick D
               where D.team_id = $team_id
               order by D.round, D.pick";
-    return DraftPickDao::createDraftPicks($query);
+    return DraftPickDao::createDraftPicksFromQuery($query);
   }
 
   /**
@@ -27,7 +27,7 @@ class DraftPickDao {
     $query = "select D.*
               from draft_pick D
               order by D.round, D.pick";
-    return DraftPickDao::createDraftPicks($query);
+    return DraftPickDao::createDraftPicksFromQuery($query);
   }
 
   /**
@@ -38,15 +38,33 @@ class DraftPickDao {
     $query = "select D.*
               from draft_pick D
               where D.draft_pick_id = $draftPickId";
-    $draft_picks = DraftPickDao::createDraftPicks($query);
-    return $draft_picks[0];
+    return DraftPickDao::createDraftPickFromQuery($query);
   }
 
-  private static function createDraftPicks($query) {
+  /**
+   * Returns the draft pick associated with the specified chef id.
+   */
+  public static function getDraftPickByChefId($chefId) {
+    CommonDao::connectToDb();
+    $query = "select D.*
+              from draft_pick D
+              where D.chef_id = $chefId";
+    return DraftPickDao::createDraftPickFromQuery($query);
+  }
+
+  private static function createDraftPickFromQuery($query) {
+    $draftPickArray = DraftPickDao::createDraftPicksFromQuery($query);
+    if (count($draftPickArray) == 1) {
+      return $draftPickArray[0];
+    }
+    return null;
+  }
+
+  private static function createDraftPicksFromQuery($query) {
     $res = mysql_query($query);
     $draft_picks = array();
     while($draft_pick_db = mysql_fetch_assoc($res)) {
-      $draft_picks[] = new DraftPick($draft_pick_db["draft_pick_id"], $draft_pick_db["round"], 
+      $draft_picks[] = new DraftPick($draft_pick_db["draft_pick_id"], $draft_pick_db["round"],
           $draft_pick_db["pick"], $draft_pick_db["team_id"], $draft_pick_db["chef_id"]);
     }
     return $draft_picks;

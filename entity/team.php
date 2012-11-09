@@ -2,6 +2,7 @@
 
 require_once 'commonEntity.php';
 CommonEntity::requireFileIn('/../dao/', 'chefDao.php');
+CommonEntity::requireFileIn('/../dao/', 'draftPickDao.php');
 CommonEntity::requireFileIn('/../dao/', 'userDao.php');
 
 /**
@@ -71,13 +72,21 @@ class Team {
 
     echo "<h2>Chefs</h2>";
     echo "<table class='left' border><tr>";
-    echo "<th></th><th>Name</th><th>Draft Rd</th><th>Fantasy Points</th></tr>";
-    // TODO add round drafted in
-    // TODO add total fantasy points
+    echo "<th></th><th>Name</th><th>Drafted</th><th>Fantasy Points</th></tr>";
     foreach ($chefs as $chef) {
+      $draftPick = DraftPickDao::getDraftPickByChefId($chef->getId());
       echo "<tr><td>" . $chef->getHeadshotImg(85, 56) . "</td>
                 <td>" . $chef->getNameLink(true) . "</td>
-            </tr>";
+                <td>";
+      if ($draftPick != null) {
+        echo "Rd: " . $draftPick->getRound() . ", Pk: " . $draftPick->getPick();
+      } else {
+        echo "--";
+      }
+      echo "</td>";
+
+      // TODO add total fantasy points
+      echo "</tr>";
     }
     echo "</table>";
   }
