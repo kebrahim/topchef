@@ -27,7 +27,7 @@ class SessionUtil {
 
 
     // redirect to team page
-    SessionUtil::redirectToUrl("teamPage.php");
+    SessionUtil::redirectToUrl("scoreboardPage.php");
   }
 
   /**

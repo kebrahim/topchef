@@ -2,7 +2,7 @@
 require_once "sessions.php";
 
 class NavigationUtil {
-  const RESULTS_BUTTON = 1;
+  const SCOREBOARD_BUTTON = 1;
   const MY_TEAM_BUTTON = 2;
   const DRAFT_BUTTON = 3;
   const ADMIN_BUTTON = 4;
@@ -44,11 +44,11 @@ class NavigationUtil {
       	NavigationUtil::printAdminMenu($isTopLevel, $selectedButton);
       }
 
-      // Summary page
-      NavigationUtil::printListItem("resultsPage.php", "Results", $isTopLevel, $selectedButton,
-          self::RESULTS_BUTTON);
+      // Scoreboard page
+      NavigationUtil::printListItem("scoreboardPage.php", "Scoreboard", $isTopLevel,
+          $selectedButton, self::SCOREBOARD_BUTTON);
 
-      // Budget page
+      // My team page
       NavigationUtil::printListItem("teamPage.php", "My Team", $isTopLevel, $selectedButton,
           self::MY_TEAM_BUTTON);
 
