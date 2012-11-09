@@ -26,17 +26,17 @@ class TeamDao {
     return TeamDao::createTeamsFromQuery($query);
   }
 
-//   /**
-//    * Returns the team to which the specified chef belongs, and null if the chef does not belong
-//    * to any team.
-//    */
-//   public static function getTeamByChef(Chef $chef) {
-//   	CommonDao::connectToDb();
-//   	$query = "select t.*
-//   	          from team t, team_chef tc
-//   	          where t.team_id = tc.team_id and tc.chef_id = " . $chef->getId();
-//   	return TeamDao::createTeamFromQuery($query);
-//   }
+  /**
+   * Returns the team to which the specified chef belongs, and null if the chef does not belong
+   * to any team.
+   */
+  public static function getTeamByChef(Chef $chef) {
+  	CommonDao::connectToDb();
+  	$query = "select t.*
+  	          from team t, team_chef tc
+  	          where t.team_id = tc.team_id and tc.chef_id = " . $chef->getId();
+  	return TeamDao::createTeamFromQuery($query);
+  }
 
   private static function createTeamFromQuery($query) {
   	$teamArray = TeamDao::createTeamsFromQuery($query);

@@ -1,6 +1,7 @@
 <?php
 
 require_once 'commonEntity.php';
+CommonEntity::requireFileIn('/../dao/', 'chefDao.php');
 CommonEntity::requireFileIn('/../dao/', 'userDao.php');
 
 /**
@@ -26,6 +27,11 @@ class Team {
 
   public function getName() {
     return $this->name;
+  }
+
+  public function getNameLink($isTopLevel) {
+    return "<a href='" . ($isTopLevel ? "" : "../") . "teamPage.php?team_id=" .
+        $this->teamId . "'>" . $this->name . " (" . $this->abbreviation . ")</a>";
   }
 
   public function getAbbreviation() {
@@ -58,7 +64,22 @@ class Team {
    * Displays all of the chefs currently belonging to this team.
    */
   function displayChefs() {
-    // TODO
+    $chefs = ChefDao::getChefsByTeam($this);
+    if (count($chefs) == 0) {
+      return;
+    }
+
+    echo "<h4>Chefs</h4>";
+    echo "<table class='left' border><tr>";
+    echo "<th></th><th>Name</th><th>Draft Rd</th><th>Fantasy Points</th></tr>";
+    // TODO add round drafted in
+    // TODO add total fantasy points
+    foreach ($chefs as $chef) {
+      echo "<tr><td>" . $chef->getHeadshotImg(85, 56) . "</td>
+                <td>" . $chef->getNameLink(true) . "</td>
+            </tr>";
+    }
+    echo "</table>";
   }
 }
 ?>
