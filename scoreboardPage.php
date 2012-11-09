@@ -17,17 +17,11 @@
   require_once 'dao/teamDao.php';
   require_once 'util/navigation.php';
 
-  // Display header.
-  NavigationUtil::printHeader(true, true, NavigationUtil::SCOREBOARD_BUTTON);
-  echo "<div class='bodyleft'>";
-  echo "<h1>Scoreboard</h1>";
-  $teams = TeamDao::getAllTeams();
-  foreach ($teams as $team) {
-    // TODO sort by total points
-    $dbPoints = StatDao::getTotalPointsByTeam($team);
+  function displayTeamScores($teamId, $dbPoints) {
+    $team = TeamDao::getTeamById($teamId);
     echo "<h3>" . $team->getNameLink(true) . " ( " . ($dbPoints != null ? $dbPoints : 0) ." )</h3>";
     echo "<table class='smallfonttable internalcenter' border>
-            <tr><th></th><th>Chef</th>";
+                <tr><th></th><th>Chef</th>";
     $maxWeek = StatDao::getMaxWeek();
     for ($i=1; $i<=$maxWeek; $i++) {
       echo "<th colspan='2' class='weekheader'>Week $i</th>";
@@ -93,7 +87,28 @@
     $cols = 2 + ($maxWeek * 2);
     echo "<tr><td colspan='" . $cols . "'><strong>Total</strong></td>
               <td><strong>$teamPoints<strong></td></tr>";
-    echo "</table>";
+    echo "</table><br/>";
+  }
+
+  // Display header.
+  NavigationUtil::printHeader(true, true, NavigationUtil::SCOREBOARD_BUTTON);
+  echo "<div class='bodyleft'>";
+  echo "<h1>Scoreboard</h1>";
+  $teams = TeamDao::getAllTeams();
+
+  // Sort teams by total points
+  $pointsToTeam = array();
+  foreach ($teams as $team) {
+    $dbPoints = StatDao::getTotalPointsByTeam($team);
+    if ($dbPoints == null) {
+      $dbPoints = 0;
+    }
+    $teamToPoints[$team->getId()] = $dbPoints;
+  }
+  arsort($teamToPoints);
+
+  foreach ($teamToPoints as $teamId => $points) {
+    displayTeamScores($teamId, $points);
   }
 
   // legend
