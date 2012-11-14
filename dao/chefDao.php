@@ -33,9 +33,10 @@ class ChefDao {
   public static function getChefsByTeam(Team $team) {
     CommonDao::connectToDb();
     $query = "select c.*
-        	  from chef c, team_chef tc
+        	  from chef c, team_chef tc, draft_pick dp
         	  where c.chef_id = tc.chef_id and tc.team_id = " . $team->getId() .
-        	" order by c.last_name, c.first_name";
+        	" and dp.chef_id = tc.chef_id
+        	  order by dp.round";
     return ChefDao::createChefsFromQuery($query);
   }
 

@@ -73,7 +73,7 @@ class Team {
 
     echo "<h2>Chefs</h2>";
     echo "<table class='left' border><tr>";
-    echo "<th></th><th>Name</th><th>Drafted</th><th>Fantasy Points</th></tr>";
+    echo "<th colspan='2'>Chef</th><th>Drafted</th><th>Fantasy Points</th></tr>";
     foreach ($chefs as $chef) {
       $draftPick = DraftPickDao::getDraftPickByChefId($chef->getId());
       echo "<tr><td>" . $chef->getHeadshotImg(85, 56) . "</td>

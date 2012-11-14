@@ -12,18 +12,20 @@ class User {
   private $password;
   private $firstName;
   private $lastName;
+  private $email;
   private $teamId;
   private $teamLoaded;
   private $team;
   private $isAdmin;
 
-  public function __construct($userId, $username, $password, $firstName, $lastName, $teamId,
-      $isAdmin) {
+  public function __construct($userId, $username, $password, $firstName, $lastName, $email, 
+      $teamId, $isAdmin) {
     $this->userId = $userId;
     $this->username = $username;
     $this->password = $password;
     $this->firstName = $firstName;
     $this->lastName = $lastName;
+    $this->email = $email;
     $this->teamId = $teamId;
     $this->teamLoaded = false;
     $this->isAdmin = $isAdmin;
@@ -69,6 +71,14 @@ class User {
     return $this->firstName . " " . $this->lastName;
   }
 
+  public function getEmail() {
+  	return $this->email;
+  }
+  
+  public function setEmail($email) {
+  	$this->email = $email;
+  }
+  
   public function getTeam() {
     if ($this->teamLoaded != true) {
       $this->team = TeamDao::getTeamById($this->teamId);

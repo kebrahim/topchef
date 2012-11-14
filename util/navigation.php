@@ -48,7 +48,11 @@ class NavigationUtil {
       // Scoreboard page
       NavigationUtil::printListItem("scoreboardPage.php", "Scoreboard", $isTopLevel,
           $selectedButton, self::SCOREBOARD_BUTTON);
-
+      
+      // Picks page
+      NavigationUtil::printListItem("picksPage.php", "Weekly Picks", $isTopLevel,
+      	  $selectedButton, self::WEEKLY_PICKS_BUTTON);
+      
       // My team page
       NavigationUtil::printListItem("teamPage.php", "My Team", $isTopLevel, $selectedButton,
           self::MY_TEAM_BUTTON);

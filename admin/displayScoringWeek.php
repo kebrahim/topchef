@@ -1,5 +1,6 @@
 <?php
   require_once '../dao/chefDao.php';
+  require_once '../dao/pickDao.php';
   require_once '../dao/statDao.php';
   require_once '../util/sessions.php';
 
@@ -36,6 +37,69 @@
     echo "<br/><input type='submit' value='Submit changes' name='submit'>
                <input type='hidden' value='$week' name='week'>";
   }
+  
+  /**
+   * Display weekly pick information for specified week
+   */
+  function displayWeekForPicks($week) {
+  	echo "<h2>Picks for Week $week</h2>";
+  	$picks = PickDao::getPicksByWeek($week);
+  	echo "<form action='../picksPage.php' method='post'>";
+  	echo "<table border class='center'>
+  	        <tr><th>Pick</th><th>Team</th><th colspan='2'>Chef</th><th>Win/Loss</th>
+  	            <th>Bonus Points</th></tr>";
+  	$nextToPick = false;
+  	$myTurnToPick = false;
+  	foreach ($picks as $pick) {
+      echo "<tr><td>" . $pick->getPickNumber() . "</td>
+                <td>" . $pick->getTeam()->getNameLink(false) . "</td>";
+      if ($pick->getChef() != null) {
+      	echo "<td>" . $pick->getChef()->getHeadshotImg(66, 42) . "</td>
+      	      <td class='chefbigname'>" . $pick->getChef()->getNameLink(false) . "</td>
+      	      <td>" . ($pick->getRecord() == Pick::WIN ? "Win" : "Loss") . "</td>
+      	      <td>" . $pick->getPoints() . "</td>";
+      } else if ($nextToPick == false) {
+      	if ($pick->getTeam()->getId() == SessionUtil::getLoggedInTeam()->getId()) {
+          // if it's my turn to pick, show drop-downs
+          $myTurnToPick = true;
+      	  // TODO only show chefs who haven't been picked this week
+      	  $chefs = ChefDao::getAllChefs();
+          echo "<td colspan='2'><select name='pick_chef_id'>
+                      <option value='0'>-- Choose Chef --</option>";
+          foreach ($chefs as $chef) {
+            echo "<option value='" . $chef->getId() . "'>" . $chef->getFullName() . "</option>";
+          }
+          echo "</select></td>";
+        
+          // dropdown for W/L
+          echo "<td><select name='pick_record'>
+                      <option value='0'>-- Choose W/L --</option>
+                      <option value='" . Pick::WIN . "'>Win</option>
+                      <option value='". Pick::LOSS . "'>Loss</option>
+                    </select></td>";
+        
+          // points is blank
+          echo "<td></td>";
+          
+          // save pick_id
+          echo "<input type='hidden' name='pick_id' value='" . $pick->getId() . "'>";
+      	} else {
+      	  echo "<td colspan='2'></td><td></td><td></td>";
+      	}
+      	$nextToPick = true;
+      } else {
+      	echo "<td colspan='2'></td><td></td><td></td>";
+      }
+      echo "</tr>";
+  	}
+  	echo "</table>";
+  	
+  	if ($myTurnToPick) {
+      echo "<input type='hidden' name='week' value='$week'>";
+  	  echo "<br/><input type='submit' name='submit' value='Submit Pick'>";
+  	}
+  	echo "</form>";
+  }
 
   // direct to corresponding function, depending on type of display
   if (isset($_REQUEST["type"])) {
@@ -51,5 +115,7 @@
 
   if ($displayType == "manage") {
     displayScoringWeekForManagement($week);
+  } else if ($displayType == "picks") {
+  	displayWeekForPicks($week);
   }
 ?>

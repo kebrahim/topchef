@@ -29,7 +29,7 @@
 
     // display table of draft picks, highlighting row for specified team
     echo "<table border class='center'>
-          <th>Round</th><th>Pick</th><th>Team</th><th>Chef</th></tr>";
+          <th>Round</th><th>Pick</th><th>Team</th><th>Chef</th><th>Fantasy Points</th></tr>";
 
     $draftPicks = DraftPickDao::getAllDraftPicks();
     foreach ($draftPicks as $draftPick) {
@@ -37,10 +37,15 @@
       if ($draftPick->getTeam()->getId() == $teamId) {
         echo " class='selected_team_row'";
       }
+      $points = StatDao::getTotalPointsByChef($draftPick->getChef());
+      if ($points == null) {
+      	$points = 0;
+      }
       echo "><td>" . $draftPick->getRound() . "</td>
              <td>" . $draftPick->getPick() . "</td>
              <td>" . $draftPick->getTeam()->getNameLink(true) . "</td>
-             <td>" . displayChefLink($draftPick->getChef()) . "</td></tr>";
+             <td>" . displayChefLink($draftPick->getChef()) . "</td>
+             <td>" . $points . "</td></tr>";
     }
     echo "</table><br>";
   }

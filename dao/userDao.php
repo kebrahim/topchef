@@ -52,7 +52,8 @@ class UserDao {
     $usersDb = array();
     while($userDb = mysql_fetch_assoc($res)) {
       $usersDb[] = new User($userDb["user_id"], $userDb["username"], $userDb["password"],
-          $userDb["first_name"], $userDb["last_name"], $userDb["team_id"], $userDb["is_admin"]);
+          $userDb["first_name"], $userDb["last_name"], $userDb["email"], $userDb["team_id"], 
+      	  $userDb["is_admin"]);
     }
     return $usersDb;
   }
@@ -64,8 +65,9 @@ class UserDao {
     CommonDao::connectToDb();
     $query = "update user set username = '" . $user->getUsername() . "',
                               password = '" . $user->getPassword() . "',
+                              email = '" . $user->getEmail() . "',
                               first_name = '" . $user->getFirstName() . "',
-                              last_name = '" . $user->getLastName() . "',
+                              last_name = '" . $user->getLastName() . "'
                           where user_id = " . $user->getId();
     $result = mysql_query($query) or die('Invalid query: ' . mysql_error());
   }

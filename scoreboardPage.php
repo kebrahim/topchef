@@ -20,8 +20,8 @@
   function displayTeamScores($teamId, $dbPoints) {
     $team = TeamDao::getTeamById($teamId);
     echo "<h3>" . $team->getNameLink(true) . " ( " . ($dbPoints != null ? $dbPoints : 0) ." )</h3>";
-    echo "<table class='smallfonttable internalcenter' border>
-                <tr><th></th><th>Chef</th>";
+    echo "<table class='smallfonttable center' border>
+                <tr><th colspan='2'>Chef</th>";
     $maxWeek = StatDao::getMaxWeek();
     for ($i=1; $i<=$maxWeek; $i++) {
       echo "<th colspan='2' class='weekheader'>Week $i</th>";
@@ -92,7 +92,10 @@
 
   // Display header.
   NavigationUtil::printHeader(true, true, NavigationUtil::SCOREBOARD_BUTTON);
-  echo "<div class='bodyleft'>";
+  echo "<div class='bodycenter'>";
+  
+  // TODO if it's my turn to make my weekly pick, show alert!
+  
   echo "<h1>Scoreboard</h1>";
   $teams = TeamDao::getAllTeams();
 
@@ -107,14 +110,32 @@
   }
   arsort($teamToPoints);
 
+  // display overall team scores
+  echo "<h2>Overall Scores</h2>";
+  echo "<table border class='center'><tr><th>Rank</th><th>Team</th><th>Points</th></tr>";
+  $rank = 0;
+  $lastScore = 1000;
+  foreach ($teamToPoints as $teamId => $points) {
+  	if ($points < $lastScore) {
+  	  $rank++;
+  	  $lastScore = $points;
+  	}
+  	echo "<tr><td>" . $rank . "</td>
+  	          <td>" . TeamDao::getTeamById($teamId)->getNameLink(true) . "</td>
+  	          <td>" . $points . "</td></tr>";
+  }
+  echo "</table>";
+  
+  // display individual team scores
+  echo "<h2>Scoring Breakdown</h2>";
   foreach ($teamToPoints as $teamId => $points) {
     displayTeamScores($teamId, $points);
   }
-
+  
   // legend
   echo "<h3>Legend</h3>";
   $stats = StatDao::getAllStats();
-  echo "<table class='internalcenter'>
+  echo "<table border class='center'>
           <tr><th>Code</th><th>Scoring Metric</th><th>Points</th></tr>";
   foreach ($stats as $stat) {
     echo "<tr><td>" . $stat->getAbbreviation() . "</td>
