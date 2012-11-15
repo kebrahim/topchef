@@ -10,6 +10,9 @@ class Stat {
   private $points;
   private $abbreviation;
 
+  const WINNER = 'W';
+  const ELIMINATED = 'E';
+  
   public function __construct($statId, $name, $points, $abbreviation) {
   	$this->statId = $statId;
     $this->name = $name;

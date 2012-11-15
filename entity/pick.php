@@ -39,6 +39,10 @@ class Pick {
     return $this->pickId;
   }
 
+  public function setId($pickId) {
+  	return $this->pickId = $pickId;
+  }
+  
   public function getWeek() {
   	return $this->week;
   }
@@ -53,6 +57,10 @@ class Pick {
       $this->teamLoaded = true;
     }
     return $this->team;
+  }
+  
+  public function getTeamId() {
+  	return $this->teamId;
   }
   
   public function getChef() {
@@ -90,6 +98,11 @@ class Pick {
   
   public function setPoints($points) {
   	return $this->points = $points;
+  }
+  
+  public function toString() {
+  	return "Wk: " . $this->week . ", Pk: " . $this->pickNumber . ", Team: " . $this->teamId . 
+  	    ", Chef: " . $this->chefId . ", Record: " . $this->record . ", Pts: " . $this->points;
   }
 }
 ?>

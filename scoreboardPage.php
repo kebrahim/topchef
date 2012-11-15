@@ -13,13 +13,53 @@
 
 <?php
   require_once 'dao/chefDao.php';
+  require_once 'dao/pickDao.php';
   require_once 'dao/statDao.php';
   require_once 'dao/teamDao.php';
   require_once 'util/navigation.php';
+  
+  /**
+   * Displays the winning/losing chef pick row for the specified team for all of the weeks.
+   */
+  function displayPickRow($teamId, $pickResult, $maxWeek) {
+  	echo "<tr><td colspan='2'><strong>" . (($pickResult == Pick::WIN) ? "Winning" : "Losing") . 
+  	    " Chef Bonus</strong></td>";
+  	$picks = PickDao::getPicksByTeamResult($teamId, $pickResult);
+  	$pickPoints = 0;
+  	for ($wk=1; $wk<=$maxWeek; $wk++) {
+  	  if (count($picks) < $wk) {
+  	  	echo "<td colspan='2'></td>";
+  	  	break;
+  	  }
+  	  $chef = $picks[$wk - 1]->getChef();
+  	  $points = $picks[$wk - 1]->getPoints();
+  	  $correct = ($points > 0);
+  	  echo "<td";
+  	  if ($correct) {
+  	  	echo " class='winner'";
+  	  }
+  	  echo "><a href='chefPage.php?chef_id=" . $chef->getId() . "'>" . $chef->getFirstName()
+  	         . "</a></td>
+  		    <td";
+  	  if ($correct) {
+  	  	echo " class='winner'";
+  	  }
+      echo ">" . $points . "</td>";
+  	  $pickPoints += $points;
+  	}
+  	echo "<td><strong>" . $pickPoints . "</strong></td>";
+  	echo "</tr>";
+  	return $pickPoints;
+  }
 
-  function displayTeamScores($teamId, $dbPoints) {
+  /**
+   * displays a list of fantasy points for all weeks, broken down by chef, for the specified team,
+   * including the total number of points scored by this team.
+   */
+  function displayTeamScores($teamId, $totalPoints) {
     $team = TeamDao::getTeamById($teamId);
-    echo "<h3>" . $team->getNameLink(true) . " ( " . ($dbPoints != null ? $dbPoints : 0) ." )</h3>";
+    echo "<h3>" . $team->getNameLink(true) . " ( " . ($totalPoints != null ? $totalPoints : 0) .
+       " )</h3>";
     echo "<table class='smallfonttable center' border>
                 <tr><th colspan='2'>Chef</th>";
     $maxWeek = StatDao::getMaxWeek();
@@ -39,7 +79,7 @@
       for($wk=1; $wk<=$maxWeek; $wk++) {
         $statLine = StatDao::getStatLineForChefWeek($chef, $wk);
         // icons
-        echo "<td class='weekscore";
+        echo "<td class='weekscorefirst";
         if (($statLine != null) && $statLine->isWinner()) {
           echo " winner";
         } else if (($statLine != null) && $statLine->isEliminated()) {
@@ -48,7 +88,6 @@
         echo "'>";
         if ($statLine != null) {
           foreach ($statLine->getStats() as $stat) {
-            // TODO icon?
             echo $stat->getAbbreviation();
           }
         }
@@ -81,7 +120,9 @@
       echo "</tr>";
     }
 
-    // TODO winner/loser predictions
+    // winner/loser predictions
+    $teamPoints += displayPickRow($teamId, Pick::WIN, $maxWeek);
+    $teamPoints += displayPickRow($teamId, Pick::LOSS, $maxWeek);
 
     // total team points
     $cols = 2 + ($maxWeek * 2);
@@ -99,14 +140,18 @@
   echo "<h1>Scoreboard</h1>";
   $teams = TeamDao::getAllTeams();
 
-  // Sort teams by total points
+  // Sort teams by total points [including chef stats & weekly picks] in descending order
   $pointsToTeam = array();
   foreach ($teams as $team) {
-    $dbPoints = StatDao::getTotalPointsByTeam($team);
-    if ($dbPoints == null) {
-      $dbPoints = 0;
+    $statPoints = StatDao::getTotalPointsByTeam($team);
+    if ($statPoints == null) {
+      $statPoints = 0;
     }
-    $teamToPoints[$team->getId()] = $dbPoints;
+    $pickPoints = PickDao::getTotalPointsByTeam($team);
+    if ($pickPoints == null) {
+      $pickPoints = 0;
+    }
+    $teamToPoints[$team->getId()] = $statPoints + $pickPoints;
   }
   arsort($teamToPoints);
 

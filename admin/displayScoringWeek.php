@@ -51,11 +51,15 @@
   	$nextToPick = false;
   	$myTurnToPick = false;
   	foreach ($picks as $pick) {
-      echo "<tr><td>" . $pick->getPickNumber() . "</td>
-                <td>" . $pick->getTeam()->getNameLink(false) . "</td>";
+  	  echo "<tr";
+  	  if (($pick->getChef() != null) && $pick->getPoints() > 0) {
+  	  	echo " class='winner'";
+  	  }
+      echo "><td>" . $pick->getPickNumber() . "</td>
+                <td>" . $pick->getTeam()->getNameLink(true) . "</td>";
       if ($pick->getChef() != null) {
       	echo "<td>" . $pick->getChef()->getHeadshotImg(66, 42) . "</td>
-      	      <td class='chefbigname'>" . $pick->getChef()->getNameLink(false) . "</td>
+      	      <td class='chefbigname'>" . $pick->getChef()->getNameLink(true) . "</td>
       	      <td>" . ($pick->getRecord() == Pick::WIN ? "Win" : "Loss") . "</td>
       	      <td>" . $pick->getPoints() . "</td>";
       } else if ($nextToPick == false) {

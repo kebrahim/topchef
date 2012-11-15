@@ -1,5 +1,6 @@
 <?php
 require_once 'commonEntity.php';
+CommonEntity::requireFileIn('/../dao/', 'statDao.php');
 
 /**
  * Represents a set of fantasy statistics for a single chef in a single week.
@@ -9,7 +10,9 @@ class ChefStat {
   private $week;
   private $chefId;
   private $statId;
-
+  private $statLoaded = false;
+  private $stat;
+  
   public function __construct($chefStatId, $week, $chefId, $statId) {
   	$this->chefStatId = $chefStatId;
   	$this->week = $week;
@@ -35,6 +38,14 @@ class ChefStat {
 
   public function getStatId() {
     return $this->statId;
+  }
+  
+  public function getStat() {
+  	if (!$this->statLoaded) {
+  	  $this->stat = StatDao::getStatById($this->statId);
+  	  $this->statLoaded = true;
+  	}
+  	return $this->stat;
   }
 }
 ?>

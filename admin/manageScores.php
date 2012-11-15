@@ -46,19 +46,48 @@ function getRedirectHTML(element, htmlString) {
 
 <?php
   require_once '../dao/chefDao.php';
+  require_once '../dao/pickDao.php';
   require_once '../dao/statDao.php';
   require_once '../dao/teamDao.php';
   require_once '../entity/team.php';
   require_once '../util/navigation.php';
 
+  /**
+   * Returns true if any picks have been made [a chef has been selected] for the given week.
+   */
+  function anyPicksBeenMade($week) {
+  	$picks = PickDao::getPicksByWeek($week);
+  	$numTeams = count(TeamDao::getAllTeams());
+  	if (count($picks) != ($numTeams * 2)) {
+      return false;
+  	}
+  	$firstPick = $picks[0];
+  	return ($firstPick->getChef() != null);
+  }
+  
+  /**
+   * Updates the picks corresponding to the specified abbreviation [w -> win, e -> loss] and awards
+   * bonus points if the specified chef is selected.
+   */
+  function updatePickForWeekChefResult($week, $chef, $statAbbreviation) {
+  	$points = 5 - floor(($week - 1) / 3);
+  	$result = ($statAbbreviation == STAT::WINNER) ? Pick::WIN : Pick::LOSS;
+  	$picks = PickDao::getPicksByWeekResult($week, $result);
+  	foreach ($picks as $pick) {
+  	  $pick->setPoints(($pick->getChefId() == $chef->getId()) ? $points : 0);
+      PickDao::updatePick($pick);
+  	}
+  }
+  
   // Display header.
   NavigationUtil::printNoWidthHeader(true, false, NavigationUtil::MANAGE_SCORES_BUTTON);
   echo "<div class='bodycenter'>";
 
   if (isset($_REQUEST['submit'])) {
-    // first, clear all stats for week.
+    // first, clear all stats and pick bonuses for week.
     $week = $_REQUEST["week"];
-    StatDao::deleteForWeek($week);
+    StatDao::deleteForWeek($week);    
+    PickDao::clearPointsForWeek($week);
 
     // for each chef/stat combo, if box is checked, create and save statline.
     $chefs = ChefDao::getAllChefs();
@@ -69,16 +98,53 @@ function getRedirectHTML(element, htmlString) {
         if (isset($_REQUEST[$checkbox])) {
           $chefStat = new ChefStat(-1, $week, $chef->getId(), $stat->getId());
           StatDao::createChefStat($chefStat);
-
-          // TODO if stat is winner, then also update picks results
+          
+          // if stat is winner or eliminated, then also update picks results
+          if (($stat->getAbbreviation() == Stat::WINNER) 
+              || ($stat->getAbbreviation() == Stat::ELIMINATED)) {
+          	updatePickForWeekChefResult($week, $chef, $stat->getAbbreviation());
+          }
         }
+      }
+    }
+    
+    // delete next week's weekly picks if none have been made yet, then insert them in reverse
+    // order of standings.
+    $nextWeek = $week + 1;
+    if (!anyPicksBeenMade($nextWeek)) {
+      PickDao::deleteForWeek($nextWeek);
+      
+      $teams = TeamDao::getAllTeams();
+      // Sort teams by total points, ascending
+      $pointsToTeam = array();
+      foreach ($teams as $team) {
+      	$dbPoints = StatDao::getTotalPointsByTeam($team);
+      	if ($dbPoints == null) {
+      		$dbPoints = 0;
+      	}
+      	$teamToPoints[$team->getId()] = $dbPoints;
+      }
+      asort($teamToPoints);
+      
+      $pickNumber = 1;
+      foreach ($teamToPoints as $teamId => $points) {
+      	// create first round of picks
+      	$pick = new Pick(-1, $nextWeek, $pickNumber, $teamId, null, null, null);
+      	PickDao::createPick($pick);
+      	
+      	// create reverse round of picks
+      	$totalPicks = count($teams) * 2;
+      	$reversePick = new Pick(-1, $nextWeek, (($totalPicks + 1) - $pickNumber), $teamId, 
+      	    null, null, null);
+      	PickDao::createPick($reversePick);
+      	$pickNumber++;
       }
     }
     echo "<div class='alert_msg'>Scoring updated!</div>";
   } else if (isset($_REQUEST["week"])) {
     $week = $_REQUEST["week"];
   } else {
-    $week = 0;
+    $week = StatDao::getMaxWeek() + 1;
   }
 
   // Allow user to choose from list of weeks to see corresponding scoring breakdown.

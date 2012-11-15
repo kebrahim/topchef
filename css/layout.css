@@ -6,7 +6,7 @@ html, body {height: 100%;}
             background-image: url("../images/waves.png");}
 #wrapper, #nowidthwrapper {padding: 12px 0 40px; margin: 0 auto;}
 #wrapper {width:1000px; border-left-style:ridge; border-right-style:ridge;
-          background-color:white;}
+          background-color:white; /*height:100%;*/}
 
 /* Header */
 header {background-color:#25609a; height:122px;}
