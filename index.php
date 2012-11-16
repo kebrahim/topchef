@@ -15,7 +15,7 @@
   require_once 'util/navigation.php';
   require_once 'util/sessions.php';
 
-  NavigationUtil::printHeader(false, true, 0);
+  NavigationUtil::printTallHeader(false, true, 0);
   echo "<div class='bodycenter'>";
 
   if (isset($_POST['login'])) {

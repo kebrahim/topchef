@@ -52,10 +52,10 @@
   	$myTurnToPick = false;
   	foreach ($picks as $pick) {
   	  echo "<tr";
-  	  if (($pick->getChef() != null) && $pick->getPoints() > 0) {
+  	  if (($pick->getChef() != null) && $pick->getPoints() > 0 && $pick->getWeek() > 1) {
   	  	echo " class='winner'";
   	  }
-      echo "><td>" . $pick->getPickNumber() . "</td>
+      echo " style='height:46;'><td>" . $pick->getPickNumber() . "</td>
                 <td>" . $pick->getTeam()->getNameLink(true) . "</td>";
       if ($pick->getChef() != null) {
       	echo "<td>" . $pick->getChef()->getHeadshotImg(66, 42) . "</td>

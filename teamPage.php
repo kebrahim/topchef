@@ -48,7 +48,7 @@ function getRedirectHTML(element, htmlString) {
   require_once 'util/navigation.php';
 
   // Display header.
-  NavigationUtil::printHeader(true, true, NavigationUtil::MY_TEAM_BUTTON);
+  NavigationUtil::printHeader(true, true, NavigationUtil::TEAM_SUMMARY_BUTTON);
 
   echo "<div class='bodyleft'>";
 

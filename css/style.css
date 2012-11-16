@@ -36,14 +36,11 @@ a {color:#25609a;}
 .alert_msg, .alert_msg_pad, .alert_msg_pad_top {color:green; font-weight:bold;}
 .alert_msg_pad_top {padding-top:20;}
 .alert_msg_pad {padding-bottom:20;}
+.alert_msg > a {color:green;}
 
 /* Team page */
-.teamchefname {width:135;}
+.teamchefname {width:145;}
 .chefdraft {width:85;}
-
-/* Scoreboard page */
-.winner {background-color:#BCECBE;}
-.eliminated {background-color:#F09E9E;}
 
 /* Login page */
 #logininfo {margin-left:6;}
@@ -68,3 +65,7 @@ a {color:#25609a;}
 /* Edit profile page */
 #pwchange {float:left; margin-right: 20px;}
 #teamchange {}
+
+/* Scoreboard page */
+.winner {background-color:#BCECBE;}
+.eliminated {background-color:#F09E9E;}

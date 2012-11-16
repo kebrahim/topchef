@@ -5,7 +5,7 @@
 
 <html>
 <head>
-<title>Rotiss.com - Scoreboard</title>
+<title>Top Chef Rotiss - Scoreboard</title>
 <link href='css/style.css' rel='stylesheet' type='text/css'>
 </head>
 
@@ -140,18 +140,35 @@
               <td><strong>$teamPoints<strong></td></tr>";
     echo "</table><br/>";
   }
+  
+  /**
+   * Returns true if it's currently the logged-in user's turn to make their weekly pick.
+   */
+  function isMyTurnToPick() {
+  	$maxPickWeek = PickDao::getMaxWeek();
+  	$picks = PickDao::getPicksByWeek($maxPickWeek);
+  	foreach ($picks as $pick) {
+  	  if ($pick->getChef() == null) {
+  	  	return ($pick->getTeamId() == SessionUtil::getLoggedInTeam()->getId());
+  	  }
+  	}
+  	return false;
+  }
 
   // Display header.
   NavigationUtil::printHeader(true, true, NavigationUtil::SCOREBOARD_BUTTON);
   echo "<div class='bodycenter'>";
   
-  // TODO if it's my turn to make my weekly pick, show alert!
+  // if it's my turn to make my weekly pick, show alert!
+  if (isMyTurnToPick()) {
+  	echo "<div class='alert_msg'>Hey! It's YOUR TURN to make your <a href='picksPage.php'>weekly pick</a>!</div>";
+  }
   
   echo "<h1>Scoreboard</h1>";
   $teams = TeamDao::getAllTeams();
 
   // Sort teams by total points [including chef stats & weekly picks] in descending order
-  $pointsToTeam = array();
+  $teamToPoints = array();
   foreach ($teams as $team) {
     $statPoints = StatDao::getTotalPointsByTeam($team);
     if ($statPoints == null) {
