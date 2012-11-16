@@ -33,7 +33,8 @@ class StatDao {
     $query = "select cs.*, s.*
     	      from chef_stat cs, stat s
     	      where cs.week = $week and cs.chef_id = " . $chef->getId() .
-            " and cs.stat_id = s.stat_id";
+            " and cs.stat_id = s.stat_id
+              order by s.ordinal DESC";
 
     return StatDao::createStatLineFromQuery($query, $chef, $week);
   }
@@ -56,7 +57,7 @@ class StatDao {
 
   private static function populateStat($statDb) {
     return new Stat($statDb["stat_id"], $statDb["name"], $statDb["points"],
-        $statDb["abbreviation"]);
+        $statDb["abbreviation"], $statDb["short_name"], $statDb["ordinal"]);
   }
 
   /**
@@ -94,7 +95,7 @@ class StatDao {
     CommonDao::connectToDb();
     $query = "select *
               from stat
-              order by stat_id";
+              order by ordinal";
     return StatDao::createStatsFromQuery($query);
   }
 
@@ -115,6 +116,34 @@ class StatDao {
     return $statsDb;
   }
 
+  /**
+   * Returns true if the specified chef has been eliminated.
+   */
+  public static function isEliminated(Chef $chef) {
+  	CommonDao::connectToDb();
+  	$query = "select count(*)
+  	          from chef_stat cs, stat s
+  	          where cs.chef_id = " . $chef->getId() . " and cs.stat_id = s.stat_id
+  	          and s.abbreviation = '" . Stat::ELIMINATED . "'";
+  	$res = mysql_query($query);
+  	$row = mysql_fetch_row($res);
+  	return ($row[0] == 1);
+  }
+  
+  public static function getEliminationWeek(Chef $chef) {
+  	CommonDao::connectToDb();
+  	$query = "select cs.week
+  	          from chef_stat cs, stat s
+  	          where cs.chef_id = " . $chef->getId() . " and cs.stat_id = s.stat_id
+  	          and s.abbreviation = '" . Stat::ELIMINATED . "'";
+  	$res = mysql_query($query);
+  	if (mysql_num_rows($res) == 0) {
+  	  return null;
+  	}
+  	$chefStatDb = mysql_fetch_assoc($res);
+  	return $chefStatDb["week"];
+  }
+  
   /**
    * Deletes all of the chefstats for the specified week.
    */

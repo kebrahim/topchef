@@ -66,16 +66,27 @@ function getRedirectHTML(element, htmlString) {
   }
   
   /**
-   * Updates the picks corresponding to the specified abbreviation [w -> win, e -> loss] and awards
+   * Updates the picks corresponding to the specified pick result [W/L] and awards
    * bonus points if the specified chef is selected.
    */
-  function updatePickForWeekChefResult($week, $chef, $statAbbreviation) {
+  function updatePickForWeekChefResult($week, $chef, $result) {
   	$points = 5 - floor(($week - 1) / 3);
-  	$result = ($statAbbreviation == STAT::WINNER) ? Pick::WIN : Pick::LOSS;
   	$picks = PickDao::getPicksByWeekResult($week, $result);
   	foreach ($picks as $pick) {
   	  $pick->setPoints(($pick->getChefId() == $chef->getId()) ? $points : 0);
       PickDao::updatePick($pick);
+  	}
+  }
+  
+  /**
+   * Updates the picks corresponding to the specified abbreviation [W/L] and zeroes
+   * out their bonus points.
+   */
+  function zeroPicksForWeekResult($week, $result) {
+  	$picks = PickDao::getPicksByWeekResult($week, $result);
+  	foreach ($picks as $pick) {
+  	  $pick->setPoints(0);
+  	  PickDao::updatePick($pick);
   	}
   }
   
@@ -92,6 +103,8 @@ function getRedirectHTML(element, htmlString) {
     // for each chef/stat combo, if box is checked, create and save statline.
     $chefs = ChefDao::getAllChefs();
     $stats = StatDao::getAllStats();
+    $foundWinner = false;
+    $foundEliminated = false;
     foreach ($chefs as $chef) {
       foreach ($stats as $stat) {
         $checkbox = "c" . $chef->getId() . "s" . $stat->getId();
@@ -100,12 +113,24 @@ function getRedirectHTML(element, htmlString) {
           StatDao::createChefStat($chefStat);
           
           // if stat is winner or eliminated, then also update picks results
-          if (($stat->getAbbreviation() == Stat::WINNER) 
-              || ($stat->getAbbreviation() == Stat::ELIMINATED)) {
-          	updatePickForWeekChefResult($week, $chef, $stat->getAbbreviation());
+          if ($stat->getAbbreviation() == Stat::WINNER) {
+          	updatePickForWeekChefResult($week, $chef, Pick::WIN);
+            $foundWinner = true;
+          } else if ($stat->getAbbreviation() == Stat::ELIMINATED) {
+          	updatePickForWeekChefResult($week, $chef, Pick::LOSS);
+          	$foundEliminated = true;
           }
         }
       }
+    }
+    
+    // if stats do not contain any individual winners or eliminations, then zero out the
+    // corresponding picks.
+    if (!$foundWinner) {
+      zeroPicksForWeekResult($week, Pick::WIN);
+    }
+    if (!$foundEliminated) {
+      zeroPicksForWeekResult($week, Pick::LOSS);
     }
     
     // delete next week's weekly picks if none have been made yet, then insert them in reverse

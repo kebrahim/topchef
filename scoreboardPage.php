@@ -72,7 +72,11 @@
     $teamPoints = 0;
     foreach ($chefs as $chef) {
       echo "<tr><td>" . $chef->getHeadshotImg(44, 28) . "</td>
-                <td class='chefname'>" . $chef->getNameLink(true) . "</td>";
+                <td class='chefname";
+      if (StatDao::isEliminated($chef)) {
+      	echo " eliminated";
+      }
+      echo "'>" . $chef->getNameLink(true) . "</td>";
 
       // weekly points
       $totalPoints = 0;
@@ -87,7 +91,13 @@
         }
         echo "'>";
         if ($statLine != null) {
+          $firstStat = true;
           foreach ($statLine->getStats() as $stat) {
+          	if (!$firstStat) {
+          	  echo ",";
+          	} else {
+          	  $firstStat = false;
+          	}
             echo $stat->getAbbreviation();
           }
         }
@@ -165,7 +175,11 @@
   	  $rank++;
   	  $lastScore = $points;
   	}
-  	echo "<tr><td>" . $rank . "</td>
+  	echo "<tr";
+  	if ($teamId == SessionUtil::getLoggedInTeam()->getId()) {
+  	  echo " class='selected_team_row'";
+  	}
+  	echo "><td>" . $rank . "</td>
   	          <td>" . TeamDao::getTeamById($teamId)->getNameLink(true) . "</td>
   	          <td>" . $points . "</td></tr>";
   }

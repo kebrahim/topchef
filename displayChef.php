@@ -1,6 +1,7 @@
 <?php
   require_once 'dao/chefDao.php';
   require_once 'dao/draftPickDao.php';
+  require_once 'dao/statDao.php';
   require_once 'util/sessions.php';
 
   /**
@@ -26,14 +27,7 @@
     // Display chef attributes.
     echo "<h1>" . $chef->getFullName() . "</h1>";
 
-    // if admin user, show edit link
-    if (SessionUtil::isLoggedInAdmin()) {
-      echo "<a href='admin/manageChef.php?chef_id=" . $chef->getId() .
-      	"'>Manage chef</a><br>";
-    }
-
     echo "<div id='column_container'>";
-
     echo "<div id='left_col'><div id='left_col_inner'>";
     echo "<table class='center'>";
 
@@ -57,7 +51,12 @@
       echo "--";
     }
     echo "</td></tr>";
-
+    
+    // elimination week
+    $eliminationWeek = StatDao::getEliminationWeek($chef);
+    echo "<tr><td><strong>Elimination Week:</strong></td>
+              <td>" . (($eliminationWeek == null) ? "--" : $eliminationWeek) . "</td>";
+    
     echo "</table><br/>";
 
     // TODO show chef's scoring stats

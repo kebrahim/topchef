@@ -3,6 +3,7 @@
 require_once 'commonEntity.php';
 CommonEntity::requireFileIn('/../dao/', 'chefDao.php');
 CommonEntity::requireFileIn('/../dao/', 'draftPickDao.php');
+CommonEntity::requireFileIn('/../dao/', 'pickDao.php');
 CommonEntity::requireFileIn('/../dao/', 'statDao.php');
 CommonEntity::requireFileIn('/../dao/', 'userDao.php');
 
@@ -36,8 +37,16 @@ class Team {
         $this->teamId . "'>" . $this->name . " (" . $this->abbreviation . ")</a>";
   }
 
+  public function setName($name) {
+  	$this->name = $name;
+  }
+  
   public function getAbbreviation() {
     return $this->abbreviation;
+  }
+  
+  public function setAbbreviation($abbreviation) {
+  	$this->abbreviation = $abbreviation;
   }
 
   public function getOwners() {
@@ -73,11 +82,16 @@ class Team {
 
     echo "<h2>Chefs</h2>";
     echo "<table class='left' border><tr>";
-    echo "<th colspan='2'>Chef</th><th>Drafted</th><th>Fantasy Points</th></tr>";
+    echo "<th colspan='2'>Chef</th><th>Drafted</th><th>Fantasy Points</th>
+          <th>Eliminated in Week</th></tr>";
     foreach ($chefs as $chef) {
       $draftPick = DraftPickDao::getDraftPickByChefId($chef->getId());
       echo "<tr><td>" . $chef->getHeadshotImg(85, 56) . "</td>
-                <td class='teamchefname'>" . $chef->getNameLink(true) . "</td>
+                <td class='teamchefname";
+      if (StatDao::isEliminated($chef)) {
+      	echo " eliminated";
+      }
+      echo "'>" . $chef->getNameLink(true) . "</td>
                 <td class='chefdraft'>";
       // draft pick
       if ($draftPick != null) {
@@ -90,9 +104,44 @@ class Team {
       // total fantasy points
       $points = StatDao::getTotalPointsByChef($chef);
       echo "<td>" . ($points == null ? "0" : $points) . "</td>";
+      
+      // elimination week
+      $eliminationWeek = StatDao::getEliminationWeek($chef);
+      echo "<td>" . (($eliminationWeek == null) ? "--" : $eliminationWeek) . "</td>";
       echo "</tr>";
     }
     echo "</table>";
+  }
+  
+  /**
+   * Displays all of the weekly picks made by this team.
+   */
+  function displayWeeklyPicks() {
+  	$picks = PickDao::getPicksByTeamId($this->teamId);
+  	
+  	echo "<h2>Weekly Picks</h2>";
+  	echo "<table class='left' border><tr>";
+  	echo "<th>Week</th><th colspan='2'>Chef</th><th>Win/Loss</th><th>Bonus Points</th></tr>";
+  	$firstPick = true;
+  	foreach ($picks as $pick) {
+      echo "<tr style='height:32;'>";
+      if ($firstPick) {
+        echo "<td rowspan='2'>" . $pick->getWeek() . "</td>";
+      	$firstPick = false;
+      } else {
+      	$firstPick = true;
+      }
+      if ($pick->getChef() == null) {
+      	echo "<td colspan=2></td><td></td><td></td>";
+      } else {
+      	echo "<td>" . $pick->getChef()->getHeadshotImg(44, 28) . "</td>
+      	      <td class='chefbigname'>" . $pick->getChef()->getNameLink(true) . "</td>
+      	      <td>" . ($pick->getRecord() == Pick::WIN ? "Win" : "Loss") . "</td>
+      	      <td>" . $pick->getPoints() . "</td>";
+      }
+      echo "</tr>";
+  	}
+  	echo "</table>";
   }
 }
 ?>

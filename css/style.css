@@ -25,8 +25,9 @@ h2 {margin:0.83em 0 0.83em;}
 h3 {margin:1em 0 1em;}
 h4 {margin:1.33em 0 1.33em;}
 label {font-weight:bold;}
-fieldset {width: 153px; text-align:left;}
-a {color:25609a;}
+fieldset {width: 153px; text-align:left; border: 1px #fea62a solid;}
+legend {color:#25609a; font-weight:bolder;}
+a {color:#25609a;}
 
 /* Messages */
 .error_msg, .error_msg_pad, .error_msg_pad_bottom {color:red; font-weight:bold;}
@@ -54,7 +55,7 @@ a {color:25609a;}
 .finished_ranking {background-color:#BCECBE;}
 
 /* Draft/Auction page */
-.selected_team_row {background-color:#E3F2F9;}
+.selected_team_row {background-color:#E3F2F9; font-weight:bold;}
 
 /* Placeholder page */
 .placeholder {background-color:#BCECBE;}
@@ -63,3 +64,7 @@ a {color:25609a;}
 /* Manage ranks page */
 .row_indb {background-color:#BCECBE;}
 .row_missing {background-color:#F09E9E;}
+
+/* Edit profile page */
+#pwchange {float:left; margin-right: 20px;}
+#teamchange {}

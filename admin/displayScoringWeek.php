@@ -10,11 +10,11 @@
   function displayScoringWeekForManagement($week) {
     echo "<h1>Scoring for Week $week</h1>";
 
-    echo "<table border class='center'>
+    echo "<table border class='center smallfonttable'>
             <tr><th>Chef</th>";
     $stats = StatDao::getAllStats();
     foreach ($stats as $stat) {
-      echo "<th>" . $stat->getName() . "</th>";
+      echo "<th>" . $stat->getShortName() . "</th>";
     }
     echo "</tr>";
 

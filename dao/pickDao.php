@@ -24,7 +24,7 @@ class PickDao {
     $query = "select p.*
     	      from pick p
               where p.team_id = $teamId
-              order by week, pick_number";
+              order by week, record";
     return PickDao::createPicksFromQuery($query);
   }
 

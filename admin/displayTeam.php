@@ -32,13 +32,12 @@
                   <td>" . $team->getAbbreviation() . "</td></tr>";
     echo "</table>";
 
-    // if admin user, show edit link
-    if (SessionUtil::isLoggedInAdmin()) {
-      echo "<br/><a href='admin/manageTeam.php?team_id=" . $team->getId() . "'>Manage team</a><br/>";
-    }
-
     // Display chefs
     $team->displayChefs();
+    echo "<br/>";
+    
+    // display weekly picks
+    $team->displayWeeklyPicks();
   }
 
   // direct to corresponding function, depending on type of display

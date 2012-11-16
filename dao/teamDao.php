@@ -62,7 +62,7 @@ class TeamDao {
   */
   public static function updateTeam($team) {
     CommonDao::connectToDb();
-    $query = "update team set team_name = '" . $team->getName() . "',
+    $query = "update team set team_name = \"" . $team->getName() . "\",
                               abbreviation = '" . $team->getAbbreviation() .
                               "' where team_id = " . $team->getId();
     $result = mysql_query($query) or die('Invalid query: ' . mysql_error());
