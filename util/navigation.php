@@ -14,6 +14,10 @@ class NavigationUtil {
     NavigationUtil::displayHeader($showNavigationLinks, $isTopLevel, $selectedButton, 'wrapper');
   }
 
+  public static function printTallHeader($showNavigationLinks, $isTopLevel, $selectedButton) {
+  	NavigationUtil::displayHeader($showNavigationLinks, $isTopLevel, $selectedButton, 'tallwrapper');
+  }
+  
   public static function printNoWidthHeader($showNavigationLinks, $isTopLevel, $selectedButton) {
     NavigationUtil::displayHeader(
         $showNavigationLinks, $isTopLevel, $selectedButton, 'nowidthwrapper');

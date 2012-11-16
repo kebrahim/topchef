@@ -49,7 +49,7 @@ function getRedirectHTML(element, htmlString) {
   require_once 'util/navigation.php';
 
   // Display header.
-  NavigationUtil::printHeader(true, true, NavigationUtil::MY_TEAM_BUTTON);
+  NavigationUtil::printTallHeader(true, true, NavigationUtil::MY_TEAM_BUTTON);
   echo "<div class='bodycenter'>";
 
   if (isset($_REQUEST["chef_id"])) {

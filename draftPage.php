@@ -16,10 +16,10 @@
 
   function displayChefLink($chef) {
     if ($chef != null) {
-      return $chef->getHeadshotImg(85, 56) . "<div class='vert_td_middle'>" . 
-          $chef->getNameLink(true) . "</div>";
+      return "<td>" . $chef->getHeadshotImg(85, 56) . "</td>
+              <td>" . $chef->getNameLink(true) . "</td>";
     } else {
-      return "--";
+      return "<td colspan='2'>--</td>";
     }
   }
 
@@ -29,7 +29,8 @@
 
     // display table of draft picks, highlighting row for specified team
     echo "<table border class='center'>
-          <th>Round</th><th>Pick</th><th>Team</th><th>Chef</th><th>Fantasy Points</th></tr>";
+          <th>Round</th><th>Pick</th><th>Team</th><th colspan='2'>Chef</th>
+          <th>Fantasy Points</th></tr>";
 
     $draftPicks = DraftPickDao::getAllDraftPicks();
     foreach ($draftPicks as $draftPick) {
@@ -44,7 +45,7 @@
       echo "><td>" . $draftPick->getRound() . "</td>
              <td>" . $draftPick->getPick() . "</td>
              <td>" . $draftPick->getTeam()->getNameLink(true) . "</td>
-             <td>" . displayChefLink($draftPick->getChef()) . "</td>
+             " . displayChefLink($draftPick->getChef()) . "
              <td>" . $points . "</td></tr>";
     }
     echo "</table><br>";

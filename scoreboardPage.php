@@ -33,7 +33,7 @@
   	  }
   	  $chef = $picks[$wk - 1]->getChef();
   	  $points = $picks[$wk - 1]->getPoints();
-  	  $correct = ($points > 0);
+  	  $correct = ($points > 0) && ($wk > 1);
   	  echo "<td";
   	  if ($correct) {
   	  	echo " class='winner'";

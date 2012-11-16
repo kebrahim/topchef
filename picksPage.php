@@ -49,7 +49,7 @@ function getRedirectHTML(element, htmlString) {
   require_once 'util/navigation.php';
   
   // Display header.
-  NavigationUtil::printHeader(true, true, NavigationUtil::WEEKLY_PICKS_BUTTON);
+  NavigationUtil::printTallHeader(true, true, NavigationUtil::WEEKLY_PICKS_BUTTON);
   echo "<div class='bodycenter'>";
   echo "<h1>Weekly Picks</h1>";
   

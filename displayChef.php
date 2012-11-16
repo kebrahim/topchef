@@ -59,11 +59,48 @@
     
     echo "</table><br/>";
 
-    // TODO show chef's scoring stats
+    // show chef's scoring stats
+    echo "<h2>Stats</h2>
+          <table border class='center'><tr>
+            <th>Week</th><th class='weekheader'>Stats</th><th>Fantasy Points</th></tr>";
+    $maxWeek = StatDao::getMaxWeek();
+    $totalPoints = 0;
+    for ($wk = 1; $wk <= $maxWeek; $wk++) {
+      $statLine = StatDao::getStatLineForChefWeek($chef, $wk);
+      $weeklyPoints = 0;
+      if ($statLine != null) {
+      	echo "<tr";
+      	if ($statLine->isWinner()) {
+      	  echo " class = 'winner'";
+      	} else if ($statLine->isEliminated()) {
+      	  echo " class = 'eliminated'";
+      	}
+      	echo "><td>" . $statLine->getWeek() . "</td>
+      	          <td>";
+      	$firstStat = true;
+      	foreach ($statLine->getStats() as $stat) {
+      	  if ($firstStat) {
+      	  	$firstStat = false;
+      	  } else {
+      	  	echo ", ";
+      	  }
+      	  echo $stat->getAbbreviation();
+      	  $weeklyPoints += $stat->getPoints();
+      	}
+      	echo "</td>
+      	      <td>" . $weeklyPoints . "</td></tr>";
+      	$totalPoints += $weeklyPoints;
+      }
+    }
+    // show cumulative points
+    echo "<tr><td colspan='2'><strong>Total</strong></td>
+              <td><strong>" . $totalPoints . "</strong></td></tr>";
+    echo "</table>";
+    
     echo "</div></div>";
 
     echo "<div id='right_col'><div id='right_col_inner'>";
-    // Headshot
+    // full body pic
     echo $chef->getBodyImg(400, 600);
     echo "</div></div></div>";
   }
