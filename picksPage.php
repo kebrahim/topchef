@@ -7,6 +7,7 @@
 <head>
 <title>Top Chef Rotiss - Weekly Picks</title>
 <link href='css/style.css' rel='stylesheet' type='text/css'>
+<link rel="shortcut icon" href="images/chefhat.ico" />
 </head>
 
 <script>

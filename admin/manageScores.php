@@ -5,8 +5,9 @@
 
 <html>
 <head>
-<title>Rotiss.com - Manage Scores</title>
+<title>Top Chef Rotiss - Manage Scores</title>
 <link href='../css/style.css' rel='stylesheet' type='text/css'>
+<link rel="shortcut icon" href="../images/chefhat.ico" />
 </head>
 
 <script>

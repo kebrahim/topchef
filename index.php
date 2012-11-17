@@ -4,6 +4,7 @@ session_start();
 require_once 'dao/userDao.php';
 require_once 'util/sessions.php';
 
+$incorrectLogin = false;
 if (isset($_POST['login'])) {
   $user = UserDao::getUserByUsernamePassword($_POST["username"], $_POST["password"]);
   if ($user == null) {
@@ -17,8 +18,9 @@ if (isset($_POST['login'])) {
 ?>
 <html>
 <head>
-<title>Rotiss.com - Top Chef</title>
+<title>Top Chef Rotiss</title>
 <link href='css/style.css' rel='stylesheet' type='text/css'>
+<link rel="shortcut icon" href="images/chefhat.ico" />
 </head>
 
 <style>

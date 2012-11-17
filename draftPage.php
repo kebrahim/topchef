@@ -5,8 +5,9 @@
 
 <html>
 <head>
-<title>Rotiss.com - Top Chef Draft</title>
+<title>Top Chef Rotiss - Draft</title>
 <link href='css/style.css' rel='stylesheet' type='text/css'>
+<link rel="shortcut icon" href="images/chefhat.ico" />
 </head>
 <body>
 
