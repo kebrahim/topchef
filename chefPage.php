@@ -21,7 +21,7 @@ function showChef(chefId) {
 
 	// Display chef information.
 	getRedirectHTML(document.getElementById("chefDisplay"),
-	    "displayChef.php?type=display&chef_id=" + chefId);
+	    "admin/displayChef.php?type=display&chef_id=" + chefId);
 }
 
 //populates the innerHTML of the specified elementId with the HTML returned by the specified

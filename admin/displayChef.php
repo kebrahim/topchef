@@ -1,8 +1,8 @@
 <?php
-  require_once 'dao/chefDao.php';
-  require_once 'dao/draftPickDao.php';
-  require_once 'dao/statDao.php';
-  require_once 'util/sessions.php';
+  require_once '../dao/chefDao.php';
+  require_once '../dao/draftPickDao.php';
+  require_once '../dao/statDao.php';
+  require_once '../util/sessions.php';
 
   /**
    * Returns a Chef based on the ID specified in the GET/POST.
