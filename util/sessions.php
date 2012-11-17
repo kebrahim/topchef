@@ -113,8 +113,7 @@ class SessionUtil {
   }
 
   public static function redirectHome() {
-    // TODO Change to http://topchef.rotiss.com
-    SessionUtil::redirectToUrl("http://localhost/topchef/");
+    SessionUtil::redirectToUrl("http://topchef.rotiss.com");
   }
 
   /**

@@ -1,7 +1,7 @@
 <?php
 class CommonDao {
   static function connectToDb() {
-    $dbh=mysql_connect ("localhost", "root", "karma") or
+    $dbh=mysql_connect ("localhost", "rotiss_kebrahim", "timebomb") or
         die ('I cannot connect to the database because: ' . mysql_error());
     mysql_select_db ("rotiss_topchef");
   }
