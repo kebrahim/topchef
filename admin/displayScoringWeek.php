@@ -41,7 +41,7 @@
   /**
    * Display weekly pick information for specified week
    */
-  function displayWeekForPicks($week) {
+  function displayWeekForPicks($week, $loggedInTeamId) {
   	echo "<h2>Picks for Week $week</h2>";
   	$picks = PickDao::getPicksByWeek($week);
   	echo "<form action='../picksPage.php' method='post'>";
@@ -63,7 +63,7 @@
       	      <td>" . ($pick->getRecord() == Pick::WIN ? "Win" : "Loss") . "</td>
       	      <td>" . $pick->getPoints() . "</td>";
       } else if ($nextToPick == false) {
-      	if ($pick->getTeam()->getId() == SessionUtil::getLoggedInTeam()->getId()) {
+      	if ($pick->getTeam()->getId() == $loggedInTeamId) {
           // if it's my turn to pick, show drop-downs
           $myTurnToPick = true;
       	  // TODO only show chefs who haven't been picked this week
@@ -120,6 +120,6 @@
   if ($displayType == "manage") {
     displayScoringWeekForManagement($week);
   } else if ($displayType == "picks") {
-  	displayWeekForPicks($week);
+  	displayWeekForPicks($week, SessionUtil::getLoggedInTeam()->getId());
   }
 ?>

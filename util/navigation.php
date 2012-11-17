@@ -128,7 +128,7 @@ class NavigationUtil {
     echo "<div class='push'></div>";
     echo "</div>"; // container
     echo "<footer>
-            <p>Top Chef Rotiss.com</p>
+            <p>Top Chef Rotiss 1.1</p>
           </footer>";
   }
 }

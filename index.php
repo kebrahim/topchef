@@ -1,4 +1,20 @@
-<?php session_start(); ?>
+<?php 
+session_start(); 
+
+require_once 'dao/userDao.php';
+require_once 'util/sessions.php';
+
+if (isset($_POST['login'])) {
+  $user = UserDao::getUserByUsernamePassword($_POST["username"], $_POST["password"]);
+  if ($user == null) {
+  	$incorrectLogin = true;
+  } else {
+    // add user information to session
+    SessionUtil::loginAndRedirect($user);
+  }
+}
+
+?>
 <html>
 <head>
 <title>Rotiss.com - Top Chef</title>
@@ -11,21 +27,13 @@
 <body>
 
 <?php
-  require_once 'dao/userDao.php';
   require_once 'util/navigation.php';
-  require_once 'util/sessions.php';
 
   NavigationUtil::printTallHeader(false, true, 0);
   echo "<div class='bodycenter'>";
-
-  if (isset($_POST['login'])) {
-    $user = UserDao::getUserByUsernamePassword($_POST["username"], $_POST["password"]);
-    if ($user == null) {
-      echo "<div class='error_msg_pad'>Invalid username or password; please try again.<br/></div>";
-    } else {
-      // add user information to session
-      SessionUtil::loginAndRedirect($user);
-    }
+  
+  if ($incorrectLogin) {
+  	echo "<div class='error_msg_pad'>Invalid username or password; please try again.<br/></div>";
   }
 
 ?>
