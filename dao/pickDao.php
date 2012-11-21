@@ -41,6 +41,18 @@ class PickDao {
  }
 
  /**
+  * Returns the pick during the specified week with the specified pick number.
+  */
+ public static function getPickByWeekPickNumber($week, $pickNumber) {
+ 	CommonDao::connectToDb();
+ 	$query = "select p.*
+ 	          from pick p
+ 	          where p.week = $week
+ 	          and p.pick_number = $pickNumber";
+ 	return PickDao::createPickFromQuery($query);
+  }
+ 
+ /**
   * Returns all of the picks during the specified week with the specified W/L result.
   */
  public static function getPicksByWeekResult($week, $result) {

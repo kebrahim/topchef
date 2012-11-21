@@ -47,6 +47,7 @@ function getRedirectHTML(element, htmlString) {
 
 <?php
   require_once 'dao/pickDao.php';
+  require_once 'util/mail.php';
   require_once 'util/navigation.php';
   
   // Display header.
@@ -65,6 +66,7 @@ function getRedirectHTML(element, htmlString) {
       	  echo "<div class='error_msg_pad_bottom'>Error: Chef + Win/Loss already selected!</div>";
         } else {
           echo "<div class='alert_msg_pad'>Pick accepted!</div>";
+          MailUtil::sendWeeklyPickEmail($pick);
       	}
       } else {
       	echo "<div class='error_msg_pad_bottom'>Please choose a Win/Loss!</div>";

@@ -15,6 +15,15 @@ class UserDao {
               where u.user_id = " . $userId;
     return UserDao::createUserFromQuery($query);
   }
+  
+  /**
+   * Returns all of the users.
+   */
+  public static function getAllUsers() {
+  	CommonDao::connectToDb();
+  	$query = "select u.* from user u";
+  	return UserDao::createUsersFromQuery($query);
+  }
 
   /**
    * Returns all of the owners for the specified team ID.
