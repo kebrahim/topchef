@@ -51,6 +51,7 @@ function getRedirectHTML(element, htmlString) {
   require_once '../dao/statDao.php';
   require_once '../dao/teamDao.php';
   require_once '../entity/team.php';
+  require_once '../util/mail.php';
   require_once '../util/navigation.php';
 
   /**
@@ -144,11 +145,15 @@ function getRedirectHTML(element, htmlString) {
       // Sort teams by total points, ascending
       $pointsToTeam = array();
       foreach ($teams as $team) {
-      	$dbPoints = StatDao::getTotalPointsByTeam($team);
-      	if ($dbPoints == null) {
-      		$dbPoints = 0;
+      	$statPoints = StatDao::getTotalPointsByTeam($team);
+      	if ($statPoints == null) {
+      	  $statPoints = 0;
       	}
-      	$teamToPoints[$team->getId()] = $dbPoints;
+      	$pickPoints = PickDao::getTotalPointsByTeam($team);
+      	if ($pickPoints == null) {
+      	  $pickPoints = 0;
+      	}
+      	$teamToPoints[$team->getId()] = $statPoints + $pickPoints;
       }
       asort($teamToPoints);
       
@@ -167,6 +172,7 @@ function getRedirectHTML(element, htmlString) {
       }
     }
     echo "<div class='alert_msg'>Scoring updated!</div>";
+    MailUtil::sendScoreUpdateEmail($week);
   } else if (isset($_REQUEST["week"])) {
     $week = $_REQUEST["week"];
   } else {

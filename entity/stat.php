@@ -14,6 +14,8 @@ class Stat {
   
   const WINNER = 'W';
   const ELIMINATED = 'E';
+  const LAST_CHANCE_WINNER = 'L';
+  const LAST_CHANCE_LOSER = 'X';
   
   public function __construct($statId, $name, $points, $abbreviation, $shortName, $ordinal) {
   	$this->statId = $statId;
@@ -46,6 +48,11 @@ class Stat {
   
   public function getOrdinal() {
   	return $this->ordinal;
+  }
+  
+  public function isLastChance() {
+  	return ($this->abbreviation == Stat::LAST_CHANCE_WINNER) || 
+  	    ($this->abbreviation == Stat::LAST_CHANCE_LOSER);
   }
 }
 ?>

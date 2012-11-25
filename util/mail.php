@@ -10,11 +10,9 @@ CommonUtil::requireFileIn('/../dao/', 'userDao.php');
 class MailUtil {
 
   /**
-   * Sends an email to all users when the specified weekly pick has been made.
+   * Sends an email to all users notifying them that the specified weekly pick has been made.
    */
   public static function sendWeeklyPickEmail(Pick $pick) {
-  	$users = UserDao::getAllUsers();
-  	$to = MailUtil::getEmailAddresses($users);
   	$subject = "Top Chef Rotiss - Week " . $pick->getWeek() . " picks";
   	$nextPick = PickDao::getPickByWeekPickNumber($pick->getWeek(), $pick->getPickNumber() + 1);
   	$message = "<strong>" . $pick->getTeam()->getName() . " (" .
@@ -29,12 +27,35 @@ class MailUtil {
   	} else {
   	  $message .= "Thus concludes the weekly picks for week " . $pick->getWeek();
   	}
-  	 
+
+  	MailUtil::sendMailToAllUsers($subject, $message);
+  }
+  
+  /**
+   * Sends an email to all users notifying them that the scores have been updated for the
+   * specified week.
+   */
+  public static function sendScoreUpdateEmail($week) {
+  	$subject = "Top Chef Rotiss - Week " . $week . " Scoring Update";
+  	$message = "The scoring for week $week has been completed. Please check the " .
+  	    "<a href='http://topchef.rotiss.com'>scoreboard page</a> for the latest results!<br/><br/>
+  	    Thanks!<br/>
+  	    Top Chef Rotiss";
+  	MailUtil::sendMailToAllUsers($subject, $message);
+  }
+
+  /**
+   * Sends the specified message w/ the specified subject to all of the users.
+   */
+  private static function sendMailToAllUsers($subject, $message) {
+  	$users = UserDao::getAllUsers();
+  	$to = MailUtil::getEmailAddresses($users);
+
   	// set headers
   	$headers  = "From: Top Chef Rotiss<noreply@rotiss.com>\r\n";
   	$headers .= 'MIME-Version: 1.0' . "\n";
   	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-  	
+
   	mail($to, $subject, $message, $headers);
   }
   

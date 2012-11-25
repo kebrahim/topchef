@@ -20,14 +20,37 @@
 
     $chefs = ChefDao::getAllChefs();
     foreach ($chefs as $chef) {
-      echo "<tr><td>" . $chef->getNameLink(false) . "</td>";
+      $eliminationWeek = StatDao::getEliminationWeek($chef);
+      $isEliminated = ($eliminationWeek != null) && ($eliminationWeek < $week);
+      echo "<tr";
+      if ($isEliminated) {
+      	echo " class='eliminated'";
+      }
+      echo "><td>" . $chef->getNameLink(false) . "</td>";
       $statLine = StatDao::getStatLineForChefWeek($chef, $week);
+      $firstStat = true;
       foreach ($stats as $stat) {
-        echo "<td><input type='checkbox' name='c" . $chef->getId() . "s" . $stat->getId() . "'";
-        if (($statLine != null) && $statLine->hasStat($stat)) {
-          echo " checked='true'";
+        if ($firstStat) {
+          echo "<td";
+          $firstStat = false;
+          if ($isEliminated) {
+          	echo " colspan=18";
+          }
+          echo ">";
+        } else if (!$isEliminated || ($stat->isLastChance())) {
+          echo "<td>";
         }
-        echo "></td>";
+        // only show checkbox if chef has not been eliminated, or it's a last chance stat
+        if (!$isEliminated || ($stat->isLastChance())) {
+          echo "<input type='checkbox' name='c" . $chef->getId() . "s" . $stat->getId() . "'";
+          if (($statLine != null) && $statLine->hasStat($stat)) {
+            echo " checked='true'";
+          }
+          echo ">";
+        }
+        if (!$isEliminated) {
+          echo "</td>";
+        }
       }
       echo "</tr>";
     }
