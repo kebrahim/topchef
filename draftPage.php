@@ -26,7 +26,8 @@
 
   // display entire draft
   function displayDraft($teamId) {
-    echo "<div class='bodycenter'><h1>Top Chef Draft 2012</h1>";
+    echo "<div class='bodycenter'><h1>Top Chef Draft 2012</h1>
+          <hr/><br/><br/>";
 
     // display table of draft picks, highlighting row for specified team
     echo "<table border class='center'>

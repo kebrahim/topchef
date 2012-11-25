@@ -28,6 +28,7 @@ label {font-weight:bold;}
 fieldset {width: 153px; text-align:left; border: 1px #fea62a solid;}
 legend {color:#25609a; font-weight:bolder;}
 a {color:#25609a;}
+hr {color:#25609a; border-style:dashed; margin-top:25px;}
 
 /* Messages */
 .error_msg, .error_msg_pad, .error_msg_pad_bottom {color:red; font-weight:bold;}

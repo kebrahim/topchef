@@ -53,8 +53,7 @@ function getRedirectHTML(element, htmlString) {
   // Display header.
   NavigationUtil::printTallHeader(true, true, NavigationUtil::WEEKLY_PICKS_BUTTON);
   echo "<div class='bodycenter'>";
-  echo "<h1>Weekly Picks</h1>";
-  
+
   if (isset($_REQUEST['submit'])) {
     if (isset($_REQUEST['pick_chef_id']) && $_REQUEST['pick_chef_id'] != '0') {
       if (isset($_REQUEST['pick_record']) && $_REQUEST['pick_record'] != '0') {
@@ -63,16 +62,16 @@ function getRedirectHTML(element, htmlString) {
       	$pick->setChef(ChefDao::getChefById($_REQUEST['pick_chef_id']));
       	$pick->setRecord($_REQUEST['pick_record']);
       	if (!PickDao::updatePick($pick)) {
-      	  echo "<div class='error_msg_pad_bottom'>Error: Chef + Win/Loss already selected!</div>";
+      	  echo "<div class='error_msg_pad'>Error: Chef + Win/Loss already selected!</div>";
         } else {
-          echo "<div class='alert_msg_pad'>Pick accepted!</div>";
+          echo "<div class='alert_msg_pad_top'>Pick accepted! Thank you!</div>";
           MailUtil::sendWeeklyPickEmail($pick);
       	}
       } else {
-      	echo "<div class='error_msg_pad_bottom'>Please choose a Win/Loss!</div>";
+      	echo "<div class='error_msg_pad'>Error: Please choose a Win/Loss!</div>";
       }
     } else {
-      echo "<div class='error_msg_pad_bottom'>Please choose a Chef!</div>";
+      echo "<div class='error_msg_pad'>Error: Please choose a Chef!</div>";
     }
     $week = $_REQUEST['week'];
   } else {
@@ -82,7 +81,7 @@ function getRedirectHTML(element, htmlString) {
   // Allow user to choose from list of weeks to see corresponding scoring breakdown.
   $maxWeek = PickDao::getMaxWeek();
   echo "<FORM ACTION='picksPage.php' METHOD=POST>";
-  echo "<label for='week'>Choose week: </label>";
+  echo "<br/><label for='week'>Choose week: </label>";
   echo "<select id='week' name='week' onchange='showWeek(this.value)'>
   <option value='0'></option>";
   for ($wk = 1; $wk <= $maxWeek; $wk++) {
@@ -92,7 +91,8 @@ function getRedirectHTML(element, htmlString) {
   	}
   	echo ">Week $wk</option>";
   }
-  echo "</select><br/>";
+  echo "</select>";
+  echo "<h1>Weekly Picks</h1><hr/>";
   echo "<div id='weekDisplay'></div><br/>";
 ?>
   

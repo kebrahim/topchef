@@ -80,8 +80,8 @@ class Team {
       return;
     }
 
-    echo "<h2>Chefs</h2>";
-    echo "<table class='left' border><tr>";
+    echo "<h3><a id='chefs'>Chefs</a></h3>";
+    echo "<table class='center' border><tr>";
     echo "<th colspan='2'>Chef</th><th>Drafted</th><th>Fantasy Points</th>
           <th>Eliminated in Week</th></tr>";
     foreach ($chefs as $chef) {
@@ -119,8 +119,8 @@ class Team {
   function displayWeeklyPicks() {
   	$picks = PickDao::getPicksByTeamId($this->teamId);
   	
-  	echo "<h2>Weekly Picks</h2>";
-  	echo "<table class='left' border><tr>";
+  	echo "<h3><a id='picks'>Weekly Picks</a></h3>";
+  	echo "<table class='center' border><tr>";
   	echo "<th>Week</th><th colspan='2'>Chef</th><th>Win/Loss</th><th>Bonus Points</th></tr>";
   	$firstPick = true;
   	foreach ($picks as $pick) {

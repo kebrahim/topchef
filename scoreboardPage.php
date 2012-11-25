@@ -176,7 +176,11 @@
   	echo "<div class='alert_msg'>Hey! It's YOUR TURN to make your <a href='picksPage.php'>weekly pick</a>!</div>";
   }
   
-  echo "<h1>Scoreboard</h1>";
+  echo "<h1>Scoreboard</h1>
+        <a href='#overall'>Overall</a>&nbsp&nbsp
+        <a href='#breakdown'>Breakdown</a>&nbsp&nbsp
+        <a href='#legend'>Legend</a>
+        <hr/>";
   $teams = TeamDao::getAllTeams();
 
   // Sort teams by total points [including chef stats & weekly picks] in descending order
@@ -195,7 +199,7 @@
   arsort($teamToPoints);
 
   // display overall team scores
-  echo "<h2>Overall Scores</h2>";
+  echo "<h2><a id='overall'>Overall Scores</a></h2>";
   echo "<table border class='center'>
           <tr><th>Rank</th><th>Team</th><th>Total Points</th><th>Chefs Remaining</th></tr>";
   $rank = 0;
@@ -215,16 +219,18 @@
   	          <td>" . StatDao::getRemainingChefCount($teamId) . "</td>
   	          </tr>";
   }
-  echo "</table>";
+  echo "</table><hr/>";
   
   // display individual team scores
-  echo "<h2>Scoring Breakdown</h2>";
+  echo "<h2><a id='breakdown'>Scoring Breakdown</a></h2>";
   foreach ($teamToPoints as $teamId => $points) {
     displayTeamScores($teamId, $points);
   }
   
+  echo "<hr/>";
+  
   // legend
-  echo "<h3>Legend</h3>";
+  echo "<h2><a id='legend'>Legend</a></h2>";
   $stats = StatDao::getAllStats();
   echo "<table border class='center'>
           <tr><th>Code</th><th>Scoring Metric</th><th>Points</th></tr>";

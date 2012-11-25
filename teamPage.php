@@ -51,7 +51,7 @@ function getRedirectHTML(element, htmlString) {
   // Display header.
   NavigationUtil::printHeader(true, true, NavigationUtil::TEAM_SUMMARY_BUTTON);
 
-  echo "<div class='bodyleft'>";
+  echo "<div class='bodycenter'>";
 
   // Get team from REQUEST; otherwise, use logged-in user's team.
   if (isset($_REQUEST["team_id"])) {
@@ -72,8 +72,12 @@ function getRedirectHTML(element, htmlString) {
     }
     echo ">" . $selectTeam->getName() . " (" . $selectTeam->getAbbreviation() . ")</option>";
   }
-  echo "</select><br/>";
-  echo "<div id='teamDisplay'></div><br/>";
+  echo "</select>";
+  echo "<h1>Team Summary</h1>";
+  echo "<a href='#summary'>Summary</a>&nbsp&nbsp
+        <a href='#chefs'>Chefs</a>&nbsp&nbsp
+        <a href='#picks'>Weekly Picks</a>";
+  echo "<hr/><div id='teamDisplay'></div><br/>";
 ?>
 
 <script>

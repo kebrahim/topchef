@@ -24,7 +24,8 @@
   $teamId = SessionUtil::getLoggedInTeam()->getId();
 
   // Display chef info
-  echo "<div class='bodycenter'><h1>The Chefs</h1>";
+  echo "<div class='bodycenter'><h1>The Chefs</h1>
+        <hr/><br/><br/>";
 
   // display table of chefs, highlighting row for specified team
   echo "<table border class='center'>

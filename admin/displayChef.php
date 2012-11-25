@@ -25,9 +25,9 @@
    */
   function displayChef(Chef $chef) {
     // Display chef attributes.
-    echo "<h1>" . $chef->getFullName() . "</h1>";
+    echo "<h1>" . $chef->getFullName() . "</h1><hr/>";
 
-    echo "<div id='column_container'>";
+    echo "<br/><div id='column_container'>";
     echo "<div id='left_col'><div id='left_col_inner'>";
     echo "<table class='center'>";
 

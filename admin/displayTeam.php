@@ -22,19 +22,19 @@
    * Display specified team on team summary page.
    */
   function displayTeam(Team $team) {
-    echo "<h1>Team Summary: " . $team->getName() . "</h1>";
+    echo "<h2><a id='summary'>" . $team->getName() . "</a></h2>";
 
     // Owners, Abbreviation
-    echo "<table>";
+    echo "<table class='center'>";
     echo "  <tr><td><strong>Owner(s):</strong></td>
                   <td>" . $team->getOwnersString() . "</td></tr>";
     echo "  <tr><td><strong>Abbreviation:</strong></td>
                   <td>" . $team->getAbbreviation() . "</td></tr>";
-    echo "</table>";
+    echo "</table><hr/>";
 
     // Display chefs
     $team->displayChefs();
-    echo "<br/>";
+    echo "<hr/>";
     
     // display weekly picks
     $team->displayWeeklyPicks();
