@@ -196,7 +196,8 @@
 
   // display overall team scores
   echo "<h2>Overall Scores</h2>";
-  echo "<table border class='center'><tr><th>Rank</th><th>Team</th><th>Points</th></tr>";
+  echo "<table border class='center'>
+          <tr><th>Rank</th><th>Team</th><th>Total Points</th><th>Chefs Remaining</th></tr>";
   $rank = 0;
   $lastScore = 1000;
   foreach ($teamToPoints as $teamId => $points) {
@@ -210,7 +211,9 @@
   	}
   	echo "><td>" . $rank . "</td>
   	          <td>" . TeamDao::getTeamById($teamId)->getNameLink(true) . "</td>
-  	          <td>" . $points . "</td></tr>";
+  	          <td>" . $points . "</td>
+  	          <td>" . StatDao::getRemainingChefCount($teamId) . "</td>
+  	          </tr>";
   }
   echo "</table>";
   

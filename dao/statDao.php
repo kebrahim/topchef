@@ -144,6 +144,10 @@ class StatDao {
   	return ($row[0] == 1);
   }
   
+  /**
+   * Returns the week the specified chef was eliminated and null if the chef has not yet been
+   * eliminated.
+   */
   public static function getEliminationWeek(Chef $chef) {
   	CommonDao::connectToDb();
   	$query = "select cs.week
@@ -156,6 +160,33 @@ class StatDao {
   	}
   	$chefStatDb = mysql_fetch_assoc($res);
   	return $chefStatDb["week"];
+  }
+  
+  /**
+   * Returns the number of chefs, belonging to the specified team, that have not yet been
+   * eliminated.
+   */
+  public static function getRemainingChefCount($teamId) {
+  	$totalChefCount = StatDao::getTotalChefsByTeam($teamId);
+  	$query = "select count(*)
+              from chef_stat cs, stat s, team_chef tc
+              where cs.chef_id = tc.chef_id and tc.team_id = " . $teamId .
+            " and cs.stat_id = s.stat_id
+              and s.abbreviation = '" . Stat::ELIMINATED . "'";
+  	$res = mysql_query($query);
+  	$row = mysql_fetch_row($res);
+  	return ($totalChefCount - $row[0]);
+  }
+  
+  /**
+   * Returns the number of chefs belonging to the specified team.
+   */
+  private static function getTotalChefsByTeam($teamId) {
+  	CommonDao::connectToDb();
+  	$query = "select count(*) from team_chef where team_id = " . $teamId;
+  	$res = mysql_query($query);
+  	$row = mysql_fetch_row($res);
+  	return $row[0];
   }
   
   /**
