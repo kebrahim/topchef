@@ -174,4 +174,17 @@ class PickDao {
   	$row = mysql_fetch_row($res);
   	return $row[0];
   }
+  
+  /**
+   * Returns the bonus points awarded for picks for the specified team during the specified week.
+   */
+  public static function getWeeklyPointsByTeam(Team $team, $week) {
+  	CommonDao::connectToDb();
+  	$query = "select sum(p.points)
+  	          from pick p
+  	          where p.week = $week and p.team_id = " . $team->getId();
+  	$res = mysql_query($query);
+  	$row = mysql_fetch_row($res);
+    return $row[0];
+  }
 }

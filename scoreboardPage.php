@@ -135,10 +135,21 @@
     $teamPoints += displayPickRow($teamId, Pick::WIN, $maxWeek);
     $teamPoints += displayPickRow($teamId, Pick::LOSS, $maxWeek);
 
-    // total team points
-    $cols = 2 + ($maxWeek * 2);
-    echo "<tr><td colspan='" . $cols . "'><strong>Total</strong></td>
-              <td><strong>$teamPoints<strong></td></tr>";
+    // total team points, including weekly breakdown
+    echo "<tr><td colspan='2'><strong>Total</strong></td>";
+    for($wk=1; $wk<=$maxWeek; $wk++) {
+      echo "<td colspan='2'><strong>";
+      $weeklyStatPoints = StatDao::getWeeklyPointsByTeam($team, $wk);
+      if ($weeklyStatPoints == null) {
+      	$weeklyStatPoints = 0;
+      }
+      $weeklyPickPoints = PickDao::getWeeklyPointsByTeam($team, $wk);
+      if ($weeklyPickPoints == null) {
+      	$weeklyPickPoints = 0;
+      }
+      echo ($weeklyStatPoints + $weeklyPickPoints) . "</td>";
+    }
+    echo "<td><strong>$teamPoints<strong></td></tr>";
     echo "</table><br/>";
   }
   
